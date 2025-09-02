@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 [RequireComponent(typeof(CapsuleCollider2D), typeof(Rigidbody2D))]
 public class PlayerMover : MonoBehaviour
@@ -6,9 +7,9 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private InputHandler _inputHandler;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _jumpForce;
-    [SerializeField] private Animator _animator;
 
     private Rigidbody2D _rigidbody;
+    private Quaternion _rotation;
 
     private void OnEnable()
     {
@@ -28,22 +29,27 @@ public class PlayerMover : MonoBehaviour
     private void FixedUpdate()
     {
         _rigidbody.velocity = new Vector2(_inputHandler.Direction * _moveSpeed, _rigidbody.velocity.y);
-    }
 
-    private void Update()
-    {
-        if (_inputHandler.Direction != 0)
-        {
-            _animator.SetBool("isWalking", true);
-        }
-        else
-        {
-            _animator.SetBool("isWalking", false);
-        }
+        Flip();
     }
 
     private void Jump()
     {
         _rigidbody.AddForce(transform.up * _jumpForce, ForceMode2D.Impulse);
+    }
+
+    private void Flip()
+    {
+        if (_inputHandler.Direction > 0)
+        {
+            _rotation.y = 0;
+            transform.rotation = _rotation;
+        }
+
+        if (_inputHandler.Direction < 0)
+        {
+            _rotation.y = 180;
+            transform.rotation = _rotation;
+        }
     }
 }

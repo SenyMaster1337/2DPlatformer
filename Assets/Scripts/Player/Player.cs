@@ -2,11 +2,11 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
-public class Coin : MonoBehaviour
+public class Player : MonoBehaviour
 {
     private CircleCollider2D _circleCollider;
 
-    public event Action<Coin> CoinDestroying;
+    public event Action<Coin> CoinDiscovered;
 
     private void Awake()
     {
@@ -20,9 +20,9 @@ public class Coin : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.TryGetComponent(out PlayerMover human))
+        if (collider.gameObject.TryGetComponent(out Coin coin))
         {
-            CoinDestroying?.Invoke(this);
+            CoinDiscovered?.Invoke(coin);
         }
     }
 }
