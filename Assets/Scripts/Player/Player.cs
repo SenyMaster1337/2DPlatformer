@@ -1,28 +1,51 @@
-using System;
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(CapsuleCollider2D), typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
-    private CircleCollider2D _circleCollider;
+    [SerializeField] private InputHandler _inputHandler;
+    [SerializeField] private PlayerMover _playerMover;
+    [SerializeField] private Flipper _flipper;
+    [SerializeField] private Jumper _jumper;
+    [SerializeField] private AnimationController _animationController;
+    [SerializeField] private GroundChecker _groundChecker;
 
-    public event Action<Coin> CoinDiscovered;
+    private Rigidbody2D _rigidbody;
 
     private void Awake()
     {
-        _circleCollider = GetComponent<CircleCollider2D>();
-
-        if (_circleCollider != null)
-        {
-            _circleCollider.isTrigger = true;
-        }
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    private void FixedUpdate()
     {
-        if (collider.gameObject.TryGetComponent(out Coin coin))
+        _playerMover.TranslateDirection(_rigidbody, _inputHandler);
+    }
+
+    private void Update()
+    {
+        if (_inputHandler.Direction > 0)
         {
-            CoinDiscovered?.Invoke(coin);
+            _flipper.FlipRight(transform);
+        }
+
+        if (_inputHandler.Direction < 0)
+        {
+            _flipper.FlipLeft(transform);
+        }
+
+        if (_inputHandler.IsJumpButtonClicked && _groundChecker.GetPermissionJump())
+        {
+            _jumper.Jump(_rigidbody);
+        }
+
+        if (_inputHandler.Direction != 0)
+        {
+            _animationController.PlayRun();
+        }
+        else
+        {
+            _animationController.StopRun();
         }
     }
 }

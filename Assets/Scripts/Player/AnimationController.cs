@@ -2,20 +2,17 @@ using UnityEngine;
 
 public class AnimationController : MonoBehaviour
 {
-    [SerializeField] private InputHandler _inputHandler;
     [SerializeField] private Animator _animator;
 
     public readonly int IsWalking = Animator.StringToHash(nameof(IsWalking));
 
-    private void Update()
+    public void PlayRun()
     {
-        if (_inputHandler.Direction != 0)
-        {
-            _animator.SetBool(IsWalking, true);
-        }
-        else
-        {
-            _animator.SetBool(IsWalking, false);
-        }
+        _animator.SetBool(IsWalking, true);
+    }
+
+    public void StopRun()
+    {
+        _animator.SetBool(IsWalking, false);
     }
 }
