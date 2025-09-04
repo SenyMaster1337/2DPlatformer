@@ -1,20 +1,17 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CapsuleCollider2D))]
+[RequireComponent(typeof(CapsuleCollider2D), typeof(Rigidbody2D))]
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Patroller _patroller;
     [SerializeField] private Flipper _flipper;
     [SerializeField] private Follower _follower;
     [SerializeField] private EnemyDamager _damager;
-    [SerializeField] private float _health;
 
     private Vector2 _previousPosition;
     private float _currentVelocityX;
     private int _rotationValueRight = 0;
     private int _rotationValueleft = 180;
-
-    public float Health => _health;
 
     private void Update()
     {
@@ -39,10 +36,5 @@ public class Enemy : MonoBehaviour
         {
             _flipper.Flip(transform, _rotationValueleft);
         }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        _health -= damage;
     }
 }

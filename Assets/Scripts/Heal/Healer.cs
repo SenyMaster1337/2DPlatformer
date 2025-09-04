@@ -1,11 +1,13 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
-public class Heal : MonoBehaviour
+public class Healer : MonoBehaviour
 {
     [SerializeField] private int _healValue;
 
     private CircleCollider2D _circleCollider;
+
+    public int HealValue => _healValue;
 
     private void Awake()
     {
@@ -14,16 +16,6 @@ public class Heal : MonoBehaviour
         if (_circleCollider != null)
         {
             _circleCollider.isTrigger = true;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.TryGetComponent(out Player player))
-        {
-            player.TakeHeal(_healValue);
-
-            Destroy(this.gameObject);
         }
     }
 }

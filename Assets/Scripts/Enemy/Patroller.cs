@@ -8,11 +8,17 @@ public class Patroller : MonoBehaviour
     private float _thresholdValue = 0.1f;
     private int _currentWaypoint = 0;
     private Vector2 _position;
+    private Transform _parentTransform;
+
+    private void Start()
+    {
+        _parentTransform = transform.parent;
+    }
 
     public void MoveToPoint()
     {
-        transform.position = Vector2.MoveTowards(transform.position, _wayPoints[_currentWaypoint].position, _moveSpeed * Time.deltaTime);
-        _position = transform.position;
+        _parentTransform.position = Vector2.MoveTowards(_parentTransform.position, _wayPoints[_currentWaypoint].position, _moveSpeed * Time.deltaTime);
+        _position = _parentTransform.position;
 
         if (_position.IsEnoughClose(_wayPoints[_currentWaypoint].position, _thresholdValue))
         {

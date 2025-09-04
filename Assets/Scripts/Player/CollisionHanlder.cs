@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
 public class CollisionHanlder : MonoBehaviour
 {
     private CircleCollider2D _circleCollider;
+
+    public event Action<int> PlayerHealing;
 
     private void Awake()
     {
@@ -20,6 +23,12 @@ public class CollisionHanlder : MonoBehaviour
         if (collider.gameObject.TryGetComponent(out Coin coin))
         {
             Destroy(coin.gameObject);
+        }
+
+        if (collider.gameObject.TryGetComponent(out Healer healer))
+        {
+            PlayerHealing?.Invoke(healer.HealValue);
+            Destroy(healer.gameObject);
         }
     }
 }

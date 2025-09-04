@@ -12,13 +12,13 @@ public class PlayerAttacker : MonoBehaviour
 
         if (enemies != null)
         {
-            if (enemies.TryGetComponent(out Enemy enemy))
+            if (enemies.TryGetComponent(out EnemyHealth enemyHealth))
             {
-                enemy.TakeDamage(_damage);
+                enemyHealth.TakeDamage(_damage);
 
-                if (enemy.Health <= 0)
+                if (enemyHealth.Value <= 0)
                 {
-                    Destroy(enemy.gameObject);
+                    Destroy(enemyHealth.gameObject);
                 }
             }
         }

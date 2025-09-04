@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InputHandler : MonoBehaviour
+public class InputReader : MonoBehaviour
 {
     private const string Horizontal = "Horizontal";
     private const int MouseButtonAttack = 0;

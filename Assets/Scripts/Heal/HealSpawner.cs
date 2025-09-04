@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HealSpawner : MonoBehaviour
 {
-    [SerializeField] private Heal _heal;
+    [SerializeField] private Healer _heal;
     [SerializeField] private SpawnPointHeal[] _spawnPoints;
 
     private void Start()

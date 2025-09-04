@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyDamager : MonoBehaviour
 {
     [SerializeField] private int _damage;
-
+    
     private BoxCollider2D _boxCollider2D;
 
     private void Awake()
@@ -19,13 +19,13 @@ public class EnemyDamager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.TryGetComponent(out Player player))
+        if (collider.gameObject.TryGetComponent(out PlayerHealth healthPlayer))
         {
-            player.TakeDamage(_damage);
+            healthPlayer.TakeDamage(_damage);
 
-            if (player.Health <= 0)
+            if (healthPlayer.Value <= 0)
             {
-                Destroy(player.gameObject);
+                Destroy(healthPlayer.gameObject);
             }
         }
     }
