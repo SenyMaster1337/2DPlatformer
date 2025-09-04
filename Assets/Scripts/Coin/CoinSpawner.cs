@@ -3,8 +3,7 @@ using UnityEngine;
 public class CoinSpawner : MonoBehaviour
 {
     [SerializeField] private Coin _coin;
-    [SerializeField] private SpawnPoint[] _spawnPoints;
-    [SerializeField] private Player _player;
+    [SerializeField] private SpawnPointCoin[] _spawnPoints;
 
     private void Start()
     {

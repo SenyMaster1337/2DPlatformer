@@ -4,15 +4,9 @@ public class Flipper : MonoBehaviour
 {
     private Quaternion _rotation;
 
-    public void FlipRight(Transform transform)
+    public void Flip(Transform transform, int rotationValue)
     {
-        _rotation.y = 0;
-        transform.rotation = _rotation;
-    }
-
-    public void FlipLeft(Transform transform)
-    {
-        _rotation.y = 180;
+        _rotation.y = rotationValue;
         transform.rotation = _rotation;
     }
 }
