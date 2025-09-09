@@ -1,13 +1,38 @@
+using System;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] private float _value;
+    [SerializeField] private float _maxValue;
 
-    public float Value => _value;
+    private float _minValue = 0;
 
-    public void TakeDamage(int damage)
+    public float MaxValue => _maxValue;
+
+    public float MinValue => _minValue;
+
+    public float CurrentValue { get; private set; }
+
+    public event Action HealthChanged;
+
+    private void Awake()
     {
-        _value -= damage;
+        CurrentValue = _maxValue;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (damage >= 0)
+        {
+            CurrentValue -= damage;
+            LimitValue();
+            HealthChanged?.Invoke();
+        }
+
+    }
+
+    private void LimitValue()
+    {
+        CurrentValue = Mathf.Clamp(CurrentValue, _minValue, _maxValue);
     }
 }

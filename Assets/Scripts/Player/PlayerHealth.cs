@@ -1,29 +1,49 @@
+using System;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private CollisionHanlder _collisionHanlder;
-    [SerializeField] private float _value;
+    [SerializeField] private float _maxValue;
 
-    public float Value => _value;
+    private float _minValue = 0;
 
-    private void OnEnable()
+    public event Action HealthChanged;
+
+    public float MaxValue => _maxValue;
+
+    public float MinValue => _minValue;
+
+    public float CurrentValue { get; private set; }
+
+    private void Awake()
     {
-        _collisionHanlder.PlayerHealing += TakeHeal;
+        CurrentValue = _maxValue;
     }
 
-    private void OnDisable()
+    public void TakeDamage(float damage)
     {
-        _collisionHanlder.PlayerHealing -= TakeHeal;
+        if (damage >= 0)
+        {
+            CurrentValue -= damage;
+            LimitValue();
+            HealthChanged?.Invoke();
+        }
+
     }
 
-    public void TakeDamage(int damage)
+    public void TakeHeal(float heal)
     {
-        _value -= damage;
+        if (heal >= 0)
+        {
+            CurrentValue += heal;
+            LimitValue();
+            HealthChanged?.Invoke();
+        }
+
     }
 
-    private void TakeHeal(int heal)
+    private void LimitValue()
     {
-        _value += heal;
+        CurrentValue = Mathf.Clamp(CurrentValue, _minValue, _maxValue);
     }
 }

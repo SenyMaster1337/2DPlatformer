@@ -23,7 +23,7 @@ public class EnemyDamager : MonoBehaviour
         {
             healthPlayer.TakeDamage(_damage);
 
-            if (healthPlayer.Value <= 0)
+            if (healthPlayer.CurrentValue <= 0)
             {
                 Destroy(healthPlayer.gameObject);
             }

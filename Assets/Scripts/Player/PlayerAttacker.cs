@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerAttacker : MonoBehaviour
 {
-    [SerializeField] private int _damage;
+    [SerializeField] private float _damage;
     [SerializeField] private float _radiusDamage;
     [SerializeField] private AttackPosition _attackPosition;
 
@@ -16,7 +16,7 @@ public class PlayerAttacker : MonoBehaviour
             {
                 enemyHealth.TakeDamage(_damage);
 
-                if (enemyHealth.Value <= 0)
+                if (enemyHealth.CurrentValue <= 0)
                 {
                     Destroy(enemyHealth.gameObject);
                 }

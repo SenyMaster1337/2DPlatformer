@@ -1,0 +1,38 @@
+using UnityEngine;
+
+public class PlayerHealthBar : MonoBehaviour
+{
+    [SerializeField] protected PlayerHealth _health;
+    [SerializeField] protected HealthSlider _healthSlider;
+    [SerializeField] protected HealthText _healthTextValue;
+
+    private Quaternion fixedRotation;
+
+    private void OnEnable()
+    {
+        _health.HealthChanged += ChangeHealth;
+    }
+
+    private void OnDisable()
+    {
+        _health.HealthChanged -= ChangeHealth;
+    }
+
+    private void Start()
+    {
+        fixedRotation = transform.rotation;
+        _healthSlider.ChangeValue(_health.CurrentValue);
+        _healthTextValue.ChangeText(_health.CurrentValue, _health.MaxValue);
+    }
+
+    private void LateUpdate()
+    {
+        transform.rotation = fixedRotation;
+    }
+
+    public virtual void ChangeHealth()
+    {
+        _healthSlider.ChangeValue(_health.CurrentValue / _health.MaxValue);
+        _healthTextValue.ChangeText(_health.CurrentValue, _health.MaxValue);
+    }
+}
