@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SmoothHealthBar : PlayerHealthBar
+public class SmoothHealthBar : HealthBar
 {
     private float _changeValue = 0.1f;
     private float _healthSliderValue;
@@ -8,12 +8,12 @@ public class SmoothHealthBar : PlayerHealthBar
 
     private void OnEnable()
     {
-        _health.HealthChanged += Init;
+        _health.OnValueChanged += Init;
     }
 
     private void OnDisable()
     {
-        _health.HealthChanged -= Init;
+        _health.OnValueChanged -= Init;
     }
 
     private void Update()
@@ -34,7 +34,7 @@ public class SmoothHealthBar : PlayerHealthBar
             _healthSliderValue = Mathf.Lerp(_healthSliderValue, _health.CurrentValue / _health.MaxValue, _changeValue);
             _healthCurrentValue = Mathf.Lerp(_healthCurrentValue, _healthSliderValue * _health.MaxValue, _changeValue);
             _healthSlider.ChangeValue(_healthSliderValue);
-            _healthTextValue.ChangeText(_healthCurrentValue, _health.MaxValue);
+            _healthTextValue.ChangeValue(_healthCurrentValue, _health.MaxValue);
         }
     }
 }

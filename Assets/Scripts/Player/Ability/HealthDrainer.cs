@@ -2,17 +2,18 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D))]
 public class HealthDrainer : MonoBehaviour
 {
-    [SerializeField] private PlayerHealth _playerHealth;
+    [SerializeField] private Health _playerHealth;
     [SerializeField] private float _timeUsageAbility;
     [SerializeField] private float _takeoverValue;
     [SerializeField] private float _timeCooldown;
     [SerializeField] private float _absorptionRate;
+    [SerializeField] private AbilityPosition _abilityPosition;
+    [SerializeField] private float _abilityRadius;
 
     public event Action AbilityActivated;
-    public event Action<float> CooldownDeactivated;
+    public event Action AbilityDeactivated;
 
     public bool IsAbilityActive { get; private set; }
 
@@ -22,119 +23,102 @@ public class HealthDrainer : MonoBehaviour
 
     public float TimeCooldown => _timeCooldown;
 
-    private bool _isEnemyInTrigger = false;
-
     private Coroutine _coroutine;
-    private CircleCollider2D _circleCollider;
-    private EnemyHealth _enemyHealth;
+    private Health _enemyHealth;
+    private Collider2D[] _hitCollidersBuffer = new Collider2D[10];
+    private int _collidersFoundCount;
 
     private void Awake()
     {
-        _circleCollider = GetComponent<CircleCollider2D>();
-
-        if (_circleCollider != null)
-        {
-            _circleCollider.isTrigger = true;
-        }
-
         IsAbilityActive = false;
         IsOnCooldown = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnDrawGizmosSelected()
     {
-        if (collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth))
-        {
-            _isEnemyInTrigger = true;
-            _enemyHealth = enemyHealth;
-        }
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(_abilityPosition.transform.position, _abilityRadius);
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth))
-        {
-            if (enemyHealth.CurrentValue <= 0)
-            {
-                Destroy(enemyHealth.gameObject);
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth))
-        {
-            _isEnemyInTrigger = false;
-        }
-    }
-
-    public void StartActivateAbilityCount()
+    public void StartActivateAbility()
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
-        _coroutine = StartCoroutine(CountUsageAbility());
+        _coroutine = StartCoroutine(ActivateAbility());
     }
 
-    private void StartDrainCount()
+    private void StartHandlerEnemy()
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
-        _coroutine = StartCoroutine(CountDrainHealth());
+        _coroutine = StartCoroutine(HandlerEnemy());
     }
 
-    private void StartCooldownCount()
+    private void StartActivateCooldown()
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
-        _coroutine = StartCoroutine(CountCooldown());
+        _coroutine = StartCoroutine(ActivateCooldown());
     }
 
-    private IEnumerator CountUsageAbility()
+    private IEnumerator ActivateAbility()
     {
         IsAbilityActive = true;
         AbilityActivated.Invoke();
 
-        StartDrainCount();
+        StartHandlerEnemy();
 
         yield return new WaitForSeconds(_timeUsageAbility);
 
         IsAbilityActive = false;
+        AbilityDeactivated.Invoke();
 
-        StartCooldownCount();
+        StartActivateCooldown();
     }
 
-    private IEnumerator CountDrainHealth()
+    private IEnumerator HandlerEnemy()
     {
         var wait = new WaitForSeconds(_absorptionRate);
 
         while (IsAbilityActive == true)
         {
-            if (_isEnemyInTrigger == true)
-            {
-                DrainHealth();
-            }
-
+            CheckEnemy();
             yield return wait;
         }
     }
 
-    private IEnumerator CountCooldown()
+    private IEnumerator ActivateCooldown()
     {
         IsOnCooldown = true;
 
         yield return new WaitForSeconds(_timeCooldown);
 
         IsOnCooldown = false;
-        CooldownDeactivated.Invoke(_timeUsageAbility);
     }
 
     private void DrainHealth()
     {
         _enemyHealth.TakeDamage(_takeoverValue);
         _playerHealth.TakeHeal(_takeoverValue);
+    }
+
+    private void CheckEnemy()
+    {
+        _collidersFoundCount = Physics2D.OverlapCircleNonAlloc(_abilityPosition.transform.position, _abilityRadius, _hitCollidersBuffer);
+
+        if (_collidersFoundCount != 0)
+        {
+            for (int i = 0; i < _collidersFoundCount; i++)
+            {
+                if (_hitCollidersBuffer[i].TryGetComponent(out Health enemyHealth))
+                {
+                    _enemyHealth = enemyHealth;
+                    DrainHealth();
+                }
+            }
+        }
     }
 }

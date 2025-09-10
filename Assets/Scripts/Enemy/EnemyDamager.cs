@@ -19,7 +19,7 @@ public class EnemyDamager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.TryGetComponent(out PlayerHealth healthPlayer))
+        if (collider.gameObject.TryGetComponent(out Health healthPlayer))
         {
             healthPlayer.TakeDamage(_damage);
 

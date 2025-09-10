@@ -12,7 +12,7 @@ public class PlayerAttacker : MonoBehaviour
 
         if (enemies != null)
         {
-            if (enemies.TryGetComponent(out EnemyHealth enemyHealth))
+            if (enemies.TryGetComponent(out Health enemyHealth))
             {
                 enemyHealth.TakeDamage(_damage);
 

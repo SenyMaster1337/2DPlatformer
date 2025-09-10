@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
         if (_inputReader.IsUseAbilityButtonClicked)
         {
             if (_healthDrainer.IsOnCooldown == false && _healthDrainer.IsAbilityActive == false)
-            _healthDrainer.StartActivateAbilityCount();
+            _healthDrainer.StartActivateAbility();
         }
 
         if (_inputReader.Direction > 0)
