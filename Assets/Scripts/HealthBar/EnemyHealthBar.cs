@@ -6,7 +6,7 @@ public class EnemyHealthBar : MonoBehaviour
     [SerializeField] protected HealthSlider _healthSlider;
     [SerializeField] protected HealthText _healthTextValue;
 
-    private Quaternion fixedRotation;
+    private Quaternion _fixedRotation;
 
     private void OnEnable()
     {
@@ -20,14 +20,14 @@ public class EnemyHealthBar : MonoBehaviour
 
     private void Start()
     {
-        fixedRotation = transform.rotation;
+        _fixedRotation = transform.rotation;
         _healthSlider.ChangeValue(_health.CurrentValue);
         _healthTextValue.ChangeText(_health.CurrentValue, _health.MaxValue);
     }
 
     private void LateUpdate()
     {
-        transform.rotation = fixedRotation;
+        transform.rotation = _fixedRotation;
     }
 
     public virtual void ChangeHealth()

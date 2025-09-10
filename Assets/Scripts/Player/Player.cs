@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AnimatorParameters _animatorParameters;
     [SerializeField] private GroundChecker _groundChecker;
     [SerializeField] private PlayerAttacker _playerAttacker;
+    [SerializeField] private HealthDrainer _healthDrainer;
 
     private Rigidbody2D _rigidbody;
     private int _rotationValueRight = 0;
@@ -31,6 +32,12 @@ public class Player : MonoBehaviour
         {
             _animatorParameters.PlayAttack();
             _playerAttacker.Attack();
+        }
+
+        if (_inputReader.IsUseAbilityButtonClicked)
+        {
+            if (_healthDrainer.IsOnCooldown == false && _healthDrainer.IsAbilityActive == false)
+            _healthDrainer.StartActivateAbilityCount();
         }
 
         if (_inputReader.Direction > 0)
