@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Flipper _flipper;
     [SerializeField] private Follower _follower;
     [SerializeField] private EnemyDamager _damager;
+    [SerializeField] private Transform _transformSpriteRenderer;
 
     private Vector2 _previousPosition;
     private float _currentVelocityX;
@@ -29,12 +30,12 @@ public class Enemy : MonoBehaviour
 
         if (_currentVelocityX > 0)
         {
-            _flipper.Flip(transform, _rotationValueRight);
+            _flipper.Flip(_transformSpriteRenderer, _rotationValueRight);
         }
 
         if (_currentVelocityX < 0)
         {
-            _flipper.Flip(transform, _rotationValueleft);
+            _flipper.Flip(_transformSpriteRenderer, _rotationValueleft);
         }
     }
 }

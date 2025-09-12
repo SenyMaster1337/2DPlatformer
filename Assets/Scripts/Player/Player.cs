@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GroundChecker _groundChecker;
     [SerializeField] private PlayerAttacker _playerAttacker;
     [SerializeField] private HealthDrainer _healthDrainer;
+    [SerializeField] private Transform _transformSpriteRenderer;
 
     private Rigidbody2D _rigidbody;
     private int _rotationValueRight = 0;
@@ -42,12 +43,12 @@ public class Player : MonoBehaviour
 
         if (_inputReader.Direction > 0)
         {
-            _flipper.Flip(transform, _rotationValueRight);
+            _flipper.Flip(_transformSpriteRenderer, _rotationValueRight);
         }
         
         if (_inputReader.Direction < 0)
         {
-            _flipper.Flip(transform, _rotationValueleft);
+            _flipper.Flip(_transformSpriteRenderer, _rotationValueleft);
         }
 
         if (_inputReader.IsJumpButtonClicked && _groundChecker.GetPermissionJump())

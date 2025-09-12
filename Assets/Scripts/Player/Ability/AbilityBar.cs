@@ -8,7 +8,7 @@ public class AbilityBar : MonoBehaviour
 
     private Coroutine _coroutine;
     private float _currentTimeValue;
-    private float _Onesecond = 1.0f;
+    private float _onesecond = 1.0f;
 
     private void OnEnable()
     {
@@ -25,6 +25,11 @@ public class AbilityBar : MonoBehaviour
     private void Start()
     {
         _abilitySlider.ChangeValue(_healthDrainer.TimeUsageAbility);
+    }
+
+    public void ChangeTime(float timeValue)
+    {
+        _abilitySlider.ChangeValue(timeValue);
     }
 
     private void StartUseAbilityTimeCount()
@@ -44,7 +49,7 @@ public class AbilityBar : MonoBehaviour
 
     private IEnumerator CountTimeUseAbility()
     {
-        var wait = new WaitForSeconds(_Onesecond);
+        var wait = new WaitForSeconds(_onesecond);
         _currentTimeValue = _healthDrainer.TimeUsageAbility;
 
         while (_currentTimeValue >= 0)
@@ -56,7 +61,7 @@ public class AbilityBar : MonoBehaviour
 
     private IEnumerator CountTimeCooldown()
     {
-        var wait = new WaitForSeconds(_Onesecond);
+        var wait = new WaitForSeconds(_onesecond);
         _currentTimeValue = 0;
 
         while (_currentTimeValue <= _healthDrainer.TimeCooldown)
@@ -64,10 +69,5 @@ public class AbilityBar : MonoBehaviour
             ChangeTime(_currentTimeValue++ / _healthDrainer.TimeCooldown);
             yield return wait;
         }
-    }
-
-    public void ChangeTime(float timeValue)
-    {
-        _abilitySlider.ChangeValue(timeValue);
     }
 }

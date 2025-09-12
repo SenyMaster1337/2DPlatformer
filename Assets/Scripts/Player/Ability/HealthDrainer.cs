@@ -28,6 +28,8 @@ public class HealthDrainer : MonoBehaviour
     private Collider2D[] _hitCollidersBuffer = new Collider2D[10];
     private int _collidersFoundCount;
 
+    private Vector2 _position;
+
     private void Awake()
     {
         IsAbilityActive = false;
@@ -48,12 +50,12 @@ public class HealthDrainer : MonoBehaviour
         _coroutine = StartCoroutine(ActivateAbility());
     }
 
-    private void StartHandlerEnemy()
+    private void StartHandleEnemy()
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
-        _coroutine = StartCoroutine(HandlerEnemy());
+        _coroutine = StartCoroutine(HandleEnemy());
     }
 
     private void StartActivateCooldown()
@@ -69,7 +71,7 @@ public class HealthDrainer : MonoBehaviour
         IsAbilityActive = true;
         AbilityActivated.Invoke();
 
-        StartHandlerEnemy();
+        StartHandleEnemy();
 
         yield return new WaitForSeconds(_timeUsageAbility);
 
@@ -79,13 +81,13 @@ public class HealthDrainer : MonoBehaviour
         StartActivateCooldown();
     }
 
-    private IEnumerator HandlerEnemy()
+    private IEnumerator HandleEnemy()
     {
         var wait = new WaitForSeconds(_absorptionRate);
 
         while (IsAbilityActive == true)
         {
-            CheckEnemy();
+            CheckEnemiesAbilityInRange();
             yield return wait;
         }
     }
@@ -105,20 +107,44 @@ public class HealthDrainer : MonoBehaviour
         _playerHealth.TakeHeal(_takeoverValue);
     }
 
-    private void CheckEnemy()
+    private void CheckEnemiesAbilityInRange()
+    {
+        if (TryGetClosestEnemy(out Enemy closestEnemy))
+        {
+            DrainHealth();
+        }
+    }
+
+    private bool TryGetClosestEnemy(out Enemy closestEnemy)
     {
         _collidersFoundCount = Physics2D.OverlapCircleNonAlloc(_abilityPosition.transform.position, _abilityRadius, _hitCollidersBuffer);
+        float closestDistance = Mathf.Infinity;
 
-        if (_collidersFoundCount != 0)
+        Enemy foundEnemy = null;
+        closestEnemy = null;
+
+        if (_collidersFoundCount == 0)
         {
-            for (int i = 0; i < _collidersFoundCount; i++)
+            return false;
+        }
+
+        for (int i = 0; i < _collidersFoundCount; i++)
+        {
+            if (_hitCollidersBuffer[i].TryGetComponent(out Enemy enemy) && _hitCollidersBuffer[i].TryGetComponent(out Health enemyHealth))
             {
-                if (_hitCollidersBuffer[i].TryGetComponent(out Health enemyHealth))
+                _position = transform.position;
+                float distance = _position.SqrDistance(_hitCollidersBuffer[i].transform.position);
+
+                if (distance < closestDistance)
                 {
+                    closestDistance = distance;
+                    foundEnemy = enemy;
                     _enemyHealth = enemyHealth;
-                    DrainHealth();
                 }
             }
         }
+
+        closestEnemy = foundEnemy;
+        return foundEnemy != null;
     }
 }
