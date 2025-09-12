@@ -9,8 +9,7 @@ public class HealthDrainer : MonoBehaviour
     [SerializeField] private float _takeoverValue;
     [SerializeField] private float _timeCooldown;
     [SerializeField] private float _absorptionRate;
-    [SerializeField] private AbilityPosition _abilityPosition;
-    [SerializeField] private float _abilityRadius;
+    [SerializeField] private EnemiesSearcher _enemiesSearcher;
 
     public event Action AbilityActivated;
     public event Action AbilityDeactivated;
@@ -25,21 +24,11 @@ public class HealthDrainer : MonoBehaviour
 
     private Coroutine _coroutine;
     private Health _enemyHealth;
-    private Collider2D[] _hitCollidersBuffer = new Collider2D[10];
-    private int _collidersFoundCount;
-
-    private Vector2 _position;
-
+    
     private void Awake()
     {
         IsAbilityActive = false;
         IsOnCooldown = false;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(_abilityPosition.transform.position, _abilityRadius);
     }
 
     public void StartActivateAbility()
@@ -87,7 +76,7 @@ public class HealthDrainer : MonoBehaviour
 
         while (IsAbilityActive == true)
         {
-            CheckEnemiesAbilityInRange();
+            AttackEnemyWithinRadiusAbility();
             yield return wait;
         }
     }
@@ -101,50 +90,17 @@ public class HealthDrainer : MonoBehaviour
         IsOnCooldown = false;
     }
 
-    private void DrainHealth()
+    private void AttackEnemyWithinRadiusAbility()
     {
-        _enemyHealth.TakeDamage(_takeoverValue);
-        _playerHealth.TakeHeal(_takeoverValue);
-    }
-
-    private void CheckEnemiesAbilityInRange()
-    {
-        if (TryGetClosestEnemy(out Enemy closestEnemy))
+        if (_enemiesSearcher.TryGetClosestEnemy(out Enemy closestEnemy, ref _enemyHealth))
         {
             DrainHealth();
         }
     }
 
-    private bool TryGetClosestEnemy(out Enemy closestEnemy)
+    private void DrainHealth()
     {
-        _collidersFoundCount = Physics2D.OverlapCircleNonAlloc(_abilityPosition.transform.position, _abilityRadius, _hitCollidersBuffer);
-        float closestDistance = Mathf.Infinity;
-
-        Enemy foundEnemy = null;
-        closestEnemy = null;
-
-        if (_collidersFoundCount == 0)
-        {
-            return false;
-        }
-
-        for (int i = 0; i < _collidersFoundCount; i++)
-        {
-            if (_hitCollidersBuffer[i].TryGetComponent(out Enemy enemy) && _hitCollidersBuffer[i].TryGetComponent(out Health enemyHealth))
-            {
-                _position = transform.position;
-                float distance = _position.SqrDistance(_hitCollidersBuffer[i].transform.position);
-
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    foundEnemy = enemy;
-                    _enemyHealth = enemyHealth;
-                }
-            }
-        }
-
-        closestEnemy = foundEnemy;
-        return foundEnemy != null;
+        _enemyHealth.TakeDamage(_takeoverValue);
+        _playerHealth.TakeHeal(_takeoverValue);
     }
 }

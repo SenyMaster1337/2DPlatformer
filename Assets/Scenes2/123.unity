@@ -1643,7 +1643,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729351685}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.027581, y: -6.650901, z: 1274.5593}
+  m_LocalPosition: {x: -0.17, y: 0.12, z: 1274.5593}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1772,7 +1772,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762848473}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.072398, y: 0.46679354, z: 2777.3276}
+  m_LocalPosition: {x: -0.22, y: 0.12, z: 2777.3276}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6926,8 +6926,7 @@ MonoBehaviour:
   _takeoverValue: 0.5
   _timeCooldown: 4
   _absorptionRate: 0.1
-  _abilityPosition: {fileID: 779197600}
-  _abilityRadius: 4.8
+  _enemiesSearcher: {fileID: 1500255411}
 --- !u!1 &1015824579
 GameObject:
   m_ObjectHideFlags: 0
@@ -8416,7 +8415,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1434198485}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.027581, y: -6.650901, z: 1274.5593}
+  m_LocalPosition: {x: -0.21, y: 0.06, z: 1274.5593}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8602,6 +8601,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac4e8db25f6a68047976f8f1c3d8e734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1500255409
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1500255410}
+  - component: {fileID: 1500255411}
+  m_Layer: 0
+  m_Name: EnemiesSearcher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1500255410
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500255409}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.3193598, y: -3.143072, z: 1363.7885}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1618717173}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1500255411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500255409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c698fb269dbc5d4aa60a6318bd90eee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _abilityPosition: {fileID: 779197600}
+  _abilityRadius: 4.8
 --- !u!1 &1535611941
 GameObject:
   m_ObjectHideFlags: 0
@@ -8683,6 +8728,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1017158923}
+  - {fileID: 779197601}
+  - {fileID: 1500255410}
+  - {fileID: 994639215}
   - {fileID: 1921408889}
   - {fileID: 1434198487}
   - {fileID: 729351686}
@@ -8691,8 +8739,6 @@ Transform:
   - {fileID: 1535611942}
   - {fileID: 1781557565}
   - {fileID: 2038925679}
-  - {fileID: 994639215}
-  - {fileID: 779197601}
   - {fileID: 40324919}
   m_Father: {fileID: 0}
   m_RootOrder: 10
@@ -9143,7 +9189,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1781557563}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.135048, y: -1.3169243, z: 593.5406}
+  m_LocalPosition: {x: -0.32, y: 0, z: 593.5406}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9879,7 +9925,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2038925678}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.011243, y: 4.5444593, z: 0.4832988}
+  m_LocalPosition: {x: -0.22, y: 0.17, z: 0.4832988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

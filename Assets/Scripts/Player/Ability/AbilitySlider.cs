@@ -1,6 +1,1 @@
-using UnityEngine;
-
-public class AbilitySlider : HealthSlider
-{
-    
-}
+public class AbilitySlider : UniversalSlider { }
